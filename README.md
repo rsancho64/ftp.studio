@@ -39,6 +39,9 @@ sudo ufw allow 990/tcp
 sudo ufw allow 40000:50000/tcp
 ```
 
+
+
+
 These commands will open ports 20, 21, 990, and a range 40000..50000 for FTP traffic
 
 For further configuration and security settings, you can refer to detailed guides on configuring vsftpd for Debian
