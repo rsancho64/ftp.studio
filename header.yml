@@ -1,0 +1,30 @@
+---
+lang: es-Es
+
+title: |
+    ![](logo.jpg){width=100}  
+    **capitulo X**
+# subtitle: | 
+#     Módulo Prof. 1º CFGS DAW  
+#     Dpto de Informática. IES Rio Arba de Tauste
+# author:
+#     - Ramón Sancho.
+
+date: \today
+
+numbersections: true
+toc: true
+colorlinks: blue
+
+papersize: a4
+geometry:
+- top=20mm
+- left=20mm
+
+fontfamily: libertinus
+fontfamilyoptions:
+- osf
+- p
+---
+
+\newpage
