@@ -91,8 +91,3 @@ https://www.sysprovider.es/blog/mejores-servidores-ftp-gratis/
 
 see [https://github.com/tomaz-suller/pptx-to-beamer](https://github.com/tomaz-suller/pptx-to-beamer) 
 
-## ufw
-
-```bash
-sudo ufw enable
-```
