@@ -1,0 +1,88 @@
+<h3 id="proftpd-en-debian">proftpd en debian</h3>
+<p>see <a
+href="https://www.ionos.es/digitalguide/servidores/configuracion/servidor-ftp-en-debian/">https://www.ionos.es/digitalguide/servidores/configuracion/servidor-ftp-en-debian/</a></p>
+<h3 id="vsftpd-en-debian">vsftpd en debian</h3>
+<p>Very Secure FTP Daemon is a popular and secure FTP server used in
+Linux and Unix systems, including Debian. To install on Debian:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update <span class="kw">&amp;&amp;</span> <span class="fu">sudo</span> apt upgrade</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install vsftpd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># start vsftpd service</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl start vsftpd</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># To ensure autostart at boot time:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable vsftpd</span></code></pre></div>
+<p>Configure: <code>/etc/vsftpd.conf</code> file. Some key confs:</p>
+<ul>
+<li>enabling local users</li>
+<li>disabling anonymous users</li>
+<li>enabling write permissions:</li>
+</ul>
+<pre class="plaintext:q"><code>anonymous_enable=NO
+local_enable=YES
+write_enable=YES</code></pre>
+<p>++seq : enable SSL/TLS encryption for FTP connections. This involves
+creating SSL certificates and configuring vsftpd to use them. Detailed
+steps: refer to specific guides</p>
+<p>To allow FTP traffic through the firewall must open ports:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install ufw <span class="at">-y</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install firewalld rsyslog <span class="at">-y</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw enable  <span class="co"># test</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw disable <span class="co"># test</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw allow 21/tcp   <span class="co"># en srv: ctl (cmd&#39;s)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw allow 20/tcp   <span class="co"># en srv: data</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># en cli son: ctl: aleatorio N (&gt;1023), y </span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#             data: N+1.</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw allow 990/tcp  <span class="co">#?</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw allow 40000:50000/tcp  <span class="co">#?</span></span></code></pre></div>
+<p>These commands will open ports 20, 21, 990, and a range 40000..50000
+for FTP traffic</p>
+<p>For further configuration and security settings, you can refer to
+detailed guides on configuring vsftpd for Debian</p>
+<h2 id="otros-servidores">otros servidores</h2>
+<p>https://www.sysprovider.es/blog/mejores-servidores-ftp-gratis/</p>
+<h1 id="objetivos">objetivos</h1>
+<h2 id="ftp-operacion-y-modos-de-funcionamiento">FTP: operacion y modos
+de funcionamiento?</h2>
+<ul>
+<li>es orientado a conexion; la inicia cualquier lado (cli o srv)
+<ul>
+<li>modo activo: cli activa (“ataca”)</li>
+<li>modo pasivo: cli indica “disposición”</li>
+</ul></li>
+</ul>
+<h2 id="administrar-usuarios-grupos-y-cuotas">administrar: usuarios,
+grupos y cuotas</h2>
+<ul>
+<li><p>la notacion POSIX <code>rwxrwxrwx</code></p></li>
+<li><p><label><input type="checkbox" />ejercicio: de todas las
+numeraciones en el rango 777 a 000 ¿cuales tienen poco-nulo
+sentido?</label></p></li>
+<li><p>Usuario anonymous (nameless) Convenio: pass: email</p></li>
+<li><p>Cuotas… servidor con FS que de soporte a cuotas</p>
+<ul>
+<li><p><span class="citation" data-cites="linux">@linux</span>:
+<code>quota</code> y montar el FS activando el tema.</p>
+<p><code>tune2fs</code> # adjust tunable file system parameters on
+ext2/ext3/ext4 file systems</p></li>
+</ul></li>
+<li><p>comandos esenciales?</p></li>
+<li><p>instalar/configurar un servidor (en Windows y en Linux)</p></li>
+<li><p>Compartir carpetas con NFS en Linux y habilitar el acceso a ellas
+en Windows con SFU</p></li>
+<li><p>Aprender a compartir carpetas por CIFS en Windows</p></li>
+<li><p>Saber instalar un servidor SAMBA en Linux e integrarlo en una red
+Windows</p></li>
+<li><p>Aprender a desplegar un servidor dedicado con S.O. específico
+para servir archivos</p></li>
+</ul>
+<h1 id="etc">etc</h1>
+<h2 id="pptx-to-beamer--dockerized-">pptx-to-beamer -dockerized-</h2>
+<p>see <a
+href="https://github.com/tomaz-suller/pptx-to-beamer">https://github.com/tomaz-suller/pptx-to-beamer</a></p>
+<h2 id="ufw">ufw</h2>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw enable</span></code></pre></div>
